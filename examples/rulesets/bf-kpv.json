@@ -1,0 +1,764 @@
+{
+  "$schema": "../../ruleset.schema.json",
+  "name": "KPV Personal Ruleset for Open Racers",
+  "version": "0.1",
+  "description": "Pricklysticks.com",
+  "rules": {
+    "#": "allowed",
+    "# adc": "allowed",
+    "# adjrange": "allowed",
+    "# aux": "allowed",
+    "# beacon": "allowed",
+    "# beeper": "allowed",
+    "# betaflight": {
+      "rule": "contains_any",
+      "contains_any": [
+        "4.5.2"
+      ],
+      "token_length": 2,
+      "required": true
+    },
+    "# color": "allowed",
+    "# config": "allowed",
+    "# config:": "allowed",
+    "# diff": "allowed",
+    "# dma": "allowed",
+    "# dump": "allowed",
+    "# end": "allowed",
+    "# feature": "allowed",
+    "# led": "allowed",
+    "# map": "allowed",
+    "# master": "allowed",
+    "# mixer": "allowed",
+    "# mode_color": "allowed",
+    "# name:": "allowed",
+    "# pin": "allowed",
+    "# profile": "allowed",
+    "# rateprofile": "allowed",
+    "# reset": "allowed",
+    "# resources": "allowed",
+    "# restore": "allowed",
+    "# rxfail": "allowed",
+    "# rxrange": "allowed",
+    "# save": "allowed",
+    "# serial": "allowed",
+    "# servo": "allowed",
+    "# start": "allowed",
+    "# timer": "allowed",
+    "# timup": "allowed",
+    "# version": "allowed",
+    "# vtx": "allowed",
+    "# vtxtable": "allowed",
+    "aux 0": {
+      "rule": "equals",
+      "value": "0 0 1800 2100 0 0",
+      "token_length": 2,
+      "required": true
+    },
+    "aux 1": {
+      "rule": "equals",
+      "value": "13 2 1800 2100 0 0",
+      "token_length": 2,
+      "required": true
+    },
+    "aux 2": {
+      "rule": "equals",
+      "value": "26 0 1800 2100 0 0",
+      "token_length": 2,
+      "required": true
+    },
+    "aux 3": {
+      "rule": "equals",
+      "value": "35 1 1800 2100 0 0",
+      "token_length": 2,
+      "required": true
+    },
+    "batch end": "allowed",
+    "batch start": "allowed",
+    "beeper": "allowed",
+    "board_name": "allowed",
+    "defaults nosave": "allowed",
+    "diff": "allowed",
+    "dump -all": "allowed",
+    "feature -led_strip": "allowed",
+    "feature osd": "allowed",
+    "feature telemetry": {
+      "rule": "allowed",
+      "token_length": 2,
+      "required": true
+    },
+    "manufacturer_id": "allowed",
+    "map": {
+      "rule": "equals",
+      "value": "TAER1234",
+      "token_length": 1,
+      "required": true
+    },
+    "mcu_id": "allowed",
+    "profile": {
+      "rule": "allowed",
+      "token_length": 1,
+      "required": true
+    },
+    "rateprofile": {
+      "rule": "allowed",
+      "token_length": 1,
+      "required": true
+    },
+    "rxfail 4": {
+      "rule": "equals",
+      "value": "s 1000",
+      "note": "Cut throttle on failsafe - send a 100 value",
+      "token_length": 2,
+      "required": true
+    },
+    "save": "allowed",
+    "serial 0": "allowed",
+    "serial 1": {
+      "rule": "allowed",
+      "token_length": 2,
+      "required": true
+    },
+    "serial 3": "allowed",
+    "serial 4": "allowed",
+    "set acc_calibration": {
+      "rule": "allowed",
+      "token_length": 2,
+      "required": true
+    },
+    "set align_board_roll": "allowed",
+    "set baro_hardware": "allowed",
+    "set bat_capacity": {
+      "rule": "equals",
+      "value": "1400",
+      "token_length": 2
+    },
+    "set craft_name": {
+      "rule": "contains_any",
+      "contains_any": [
+        "Reactor",
+        "MAD",
+        "F50"
+      ],
+      "token_length": 2,
+      "required": true
+    },
+    "set crash_gthreshold": {
+      "rule": "equals",
+      "value": "500",
+      "token_length": 2,
+      "required": true
+    },
+    "set crash_recovery": {
+      "rule": "equals",
+      "value": "ON",
+      "token_length": 2,
+      "required": true
+    },
+    "set crash_setpoint_threshold": {
+      "rule": "equals",
+      "value": "400",
+      "token_length": 2,
+      "required": true
+    },
+    "set d_min_pitch": {
+      "rule": "equals",
+      "value": "23",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set d_min_roll": {
+      "rule": "equals",
+      "value": "21",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set d_pitch": {
+      "rule": "equals",
+      "value": "40",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set d_roll": {
+      "rule": "equals",
+      "value": "35",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set debug_mode": {
+      "rule": "equals",
+      "value": "GYRO_SCALED",
+      "token_length": 2,
+      "required": true
+    },
+    "set displayport_msp_fonts": {
+      "rule": "equals",
+      "value": "0,0,0,0",
+      "note": "forces the system to use default, non-colored fonts, resolving common compatibility issues with HD digital systems like DJI Goggles 2/V2",
+      "token_length": 2,
+      "required": true
+    },
+    "set dshot_bidir": {
+      "rule": "equals",
+      "value": "ON",
+      "token_length": 2,
+      "required": true
+    },
+    "set dterm_lpf1_dyn_expo": {
+      "rule": "equals",
+      "value": "7",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set dyn_idle_min_rpm": {
+      "rule": "equals",
+      "value": "40",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set dyn_idle_p_gain": {
+      "rule": "equals",
+      "value": "35",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set dyn_notch_count": {
+      "rule": "equals",
+      "value": "2",
+      "token_length": 2,
+      "required": true
+    },
+    "set dyn_notch_max_hz": {
+      "rule": "equals",
+      "value": "650",
+      "token_length": 2,
+      "required": true
+    },
+    "set dyn_notch_min_hz": {
+      "rule": "equals",
+      "value": "125",
+      "token_length": 2,
+      "required": true
+    },
+    "set dyn_notch_q": {
+      "rule": "equals",
+      "value": "450",
+      "token_length": 2,
+      "required": true
+    },
+    "set ez_landing_limit": {
+      "rule": "equals",
+      "value": "5",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set f_pitch": {
+      "rule": "equals",
+      "value": "137",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set f_roll": {
+      "rule": "equals",
+      "value": "125",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set feedforward_averaging": {
+      "rule": "equals",
+      "value": "2_POINT",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set feedforward_boost": {
+      "rule": "equals",
+      "value": "18",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set feedforward_jitter_factor": {
+      "rule": "equals",
+      "value": "3",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set feedforward_max_rate_limit": {
+      "rule": "equals",
+      "value": "100",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set feedforward_smooth_factor": {
+      "rule": "equals",
+      "value": "65",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set gyro_2_sensor_align": "allowed",
+    "set gyro_lpf1_dyn_max_hz": {
+      "rule": "equals",
+      "value": "1000",
+      "token_length": 2,
+      "required": true
+    },
+    "set gyro_lpf1_dyn_min_hz": {
+      "rule": "equals",
+      "value": "500",
+      "token_length": 2,
+      "required": true
+    },
+    "set gyro_lpf1_static_hz": {
+      "rule": "equals",
+      "value": "0",
+      "token_length": 2,
+      "required": true
+    },
+    "set gyro_to_use": "allowed",
+    "set i_pitch": {
+      "rule": "equals",
+      "value": "89",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set i_roll": {
+      "rule": "equals",
+      "value": "81",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set iterm_limit": {
+      "rule": "equals",
+      "value": "500",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set iterm_relax_cutoff": {
+      "rule": "equals",
+      "value": "45",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set motor_output_limit": {
+      "rule": "equals",
+      "value": "100",
+      "token_length": 2
+    },
+    "set motor_pwm_protocol": {
+      "rule": "contains_any",
+      "contains_any": [
+        "DSHOT300",
+        "DSHOT600"
+      ],
+      "note": "If missing the default of DSHOT600 will be in use",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_avg_cell_voltage_pos": {
+      "rule": "equals",
+      "value": "2614",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_canvas_height": {
+      "rule": "equals",
+      "value": "18",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_canvas_width": {
+      "rule": "equals",
+      "value": "50",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_craft_name_pos": {
+      "rule": "equals",
+      "value": "2049",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_disarmed_pos": {
+      "rule": "equals",
+      "value": "2421",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_link_quality_pos": {
+      "rule": "equals",
+      "value": "2593",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_pilot_name_pos": {
+      "rule": "equals",
+      "value": "2081",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_stat_bitmask": {
+      "rule": "equals",
+      "value": "2081562660",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_throttle_pos": {
+      "rule": "equals",
+      "value": "2070",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_vtx_channel_pos": {
+      "rule": "equals",
+      "value": "3625",
+      "token_length": 2,
+      "required": true
+    },
+    "set osd_warnings_pos": {
+      "rule": "equals",
+      "value": "14676",
+      "token_length": 2,
+      "required": true
+    },
+    "set p_pitch": {
+      "rule": "equals",
+      "value": "41",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set p_roll": {
+      "rule": "equals",
+      "value": "38",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set pidsum_limit_yaw": {
+      "rule": "equals",
+      "value": "1000",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set pilot_name": {
+      "rule": "equals",
+      "value": "KPV",
+      "token_length": 2,
+      "required": true
+    },
+    "set pitch_expo": {
+      "rule": "equals",
+      "value": "17",
+      "token_length": 2,
+      "required": true
+    },
+    "set pitch_rc_rate": {
+      "rule": "equals",
+      "value": "18",
+      "token_length": 2,
+      "required": true
+    },
+    "set pitch_srate": {
+      "rule": "equals",
+      "value": "53",
+      "token_length": 2,
+      "required": true
+    },
+    "set rc_smoothing_auto_factor": {
+      "rule": "equals",
+      "value": "25",
+      "token_length": 2,
+      "required": true
+    },
+    "set rc_smoothing_auto_factor_throttle": {
+      "rule": "equals",
+      "value": "25",
+      "token_length": 2,
+      "required": true
+    },
+    "set report_cell_voltage": {
+      "rule": "equals",
+      "value": "ON",
+      "token_length": 2,
+      "required": true
+    },
+    "set roll_expo": {
+      "rule": "equals",
+      "value": "17",
+      "token_length": 2,
+      "required": true
+    },
+    "set roll_rc_rate": {
+      "rule": "equals",
+      "value": "21",
+      "token_length": 2,
+      "required": true
+    },
+    "set roll_srate": {
+      "rule": "equals",
+      "value": "66",
+      "token_length": 2,
+      "required": true
+    },
+    "set rpm_filter_fade_range_hz": {
+      "rule": "equals",
+      "value": "100",
+      "token_length": 2,
+      "required": true
+    },
+    "set simplified_d_gain": {
+      "rule": "equals",
+      "value": "70",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set simplified_dmax_gain": {
+      "rule": "equals",
+      "value": "200",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set simplified_feedforward_gain": {
+      "rule": "equals",
+      "value": "105",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set simplified_gyro_filter": {
+      "rule": "equals",
+      "value": "OFF",
+      "token_length": 2,
+      "required": true
+    },
+    "set simplified_i_gain": {
+      "rule": "equals",
+      "value": "120",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set simplified_pi_gain": {
+      "rule": "equals",
+      "value": "85",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set simplified_pids_mode": {
+      "rule": "equals",
+      "value": "RP",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set simplified_pitch_pi_gain": {
+      "rule": "equals",
+      "value": "105",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set throttle_boost": {
+      "rule": "equals",
+      "value": "2",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set tpa_breakpoint": {
+      "rule": "equals",
+      "value": "1250",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set tpa_rate": {
+      "rule": "equals",
+      "value": "70",
+      "note": "Karate Preset",
+      "token_length": 2,
+      "required": true
+    },
+    "set vbat_full_cell_voltage": {
+      "rule": "equals",
+      "value": "420",
+      "token_length": 2
+    },
+    "set vbat_max_cell_voltage": {
+      "rule": "equals",
+      "value": "437",
+      "token_length": 2
+    },
+    "set vbat_min_cell_voltage": {
+      "rule": "equals",
+      "value": "325",
+      "token_length": 2
+    },
+    "set vbat_sag_compensation": {
+      "rule": "equals",
+      "value": "110",
+      "token_length": 2,
+      "required": true
+    },
+    "set vbat_warning_cell_voltage": {
+      "rule": "equals",
+      "value": "345",
+      "token_length": 2
+    },
+    "set vtx_band": {
+      "rule": "equals",
+      "value": "5",
+      "note": "5 = Raceband",
+      "token_length": 2,
+      "required": true
+    },
+    "set vtx_channel": {
+      "rule": "equals",
+      "value": "2",
+      "token_length": 2,
+      "required": true
+    },
+    "set vtx_freq": {
+      "rule": "allowed",
+      "token_length": 2,
+      "required": true
+    },
+    "set vtx_power": {
+      "rule": "equals",
+      "value": "1",
+      "token_length": 2,
+      "required": true
+    },
+    "set yaw_expo": {
+      "rule": "equals",
+      "value": "17",
+      "token_length": 2,
+      "required": true
+    },
+    "set yaw_motors_reversed": {
+      "rule": "equals",
+      "value": "ON",
+      "token_length": 2,
+      "required": true
+    },
+    "set yaw_rc_rate": {
+      "rule": "equals",
+      "value": "18",
+      "token_length": 2,
+      "required": true
+    },
+    "set yaw_srate": {
+      "rule": "equals",
+      "value": "53",
+      "token_length": 2,
+      "required": true
+    },
+    "signature": "allowed",
+    "vtx 0": {
+      "rule": "equals",
+      "value": "3 0 0 3 900 1200",
+      "token_length": 2,
+      "required": true
+    },
+    "vtx 1": {
+      "rule": "equals",
+      "value": "3 0 0 1 1200 1800",
+      "token_length": 2,
+      "required": true
+    },
+    "vtx 2": {
+      "rule": "equals",
+      "value": "3 0 0 2 1800 2100",
+      "token_length": 2,
+      "required": true
+    },
+    "vtxtable band 1": {
+      "rule": "equals",
+      "value": "BOSCAM_A A CUSTOM 0 0 0 0 0 0 0 0",
+      "token_length": 3,
+      "required": true
+    },
+    "vtxtable band 2": {
+      "rule": "equals",
+      "value": "BOSCAM_B B CUSTOM 0 0 0 0 0 0 0 0",
+      "token_length": 3,
+      "required": true
+    },
+    "vtxtable band 3": {
+      "rule": "equals",
+      "value": "BOSCAM_E E CUSTOM 5705 0 0 0 0 0 0 0",
+      "token_length": 3,
+      "required": true
+    },
+    "vtxtable band 4": {
+      "rule": "equals",
+      "value": "FATSHARK F CUSTOM 5740 5760 0 5800 0 0 0 0",
+      "token_length": 3,
+      "required": true
+    },
+    "vtxtable band 5": {
+      "rule": "equals",
+      "value": "RACEBAND R CUSTOM 5658 5695 5732 5769 5806 5843 5880 5917",
+      "token_length": 3,
+      "required": true
+    },
+    "vtxtable band 6": {
+      "rule": "equals",
+      "value": "LOWBAND L CUSTOM 0 0 0 0 0 0 0 0",
+      "token_length": 3,
+      "required": true
+    },
+    "vtxtable bands": {
+      "rule": "equals",
+      "value": "6",
+      "token_length": 2,
+      "required": true
+    },
+    "vtxtable channels": {
+      "rule": "equals",
+      "value": "8",
+      "token_length": 2,
+      "required": true
+    },
+    "vtxtable powerlabels": {
+      "rule": "equals",
+      "value": "25 200 0",
+      "token_length": 2,
+      "required": true
+    },
+    "vtxtable powerlevels": {
+      "rule": "equals",
+      "value": "3",
+      "token_length": 2,
+      "required": true
+    },
+    "vtxtable powervalues": {
+      "rule": "equals",
+      "value": "14 23 0",
+      "token_length": 2,
+      "required": true
+    }
+  }
+}

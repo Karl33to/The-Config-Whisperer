@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Config Whisperer Ruleset",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of this ruleset."
+    },
+    "description": {
+      "type": "string",
+      "description": "A short description of what this ruleset validates."
+    },
+    "rules": {
+      "type": "object",
+      "description": "A map of parameter keys to their validation rules.",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": ["allowed"],
+            "description": "Simple rule allowing any value for this parameter."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "rule": {
+                "type": "string",
+                "enum": [
+                  "allowed",
+                  "equals",
+                  "nonzero",
+                  "forbidden",
+                  "contains_all",
+                  "contains_any",
+                  "contains_exact",
+                  "review",
+                  "positional"
+                ],
+                "description": "The type of validation to perform."
+              },
+              "value": {
+                "type": "string",
+                "description": "The exact value required (for 'equals')."
+              },
+              "contains_all": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Every token in this list must be present in the line."
+              },
+              "contains_any": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "At least one token in this list must be present in the line."
+              },
+              "tokens": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "The tokens must match the remainder of the line exactly (for 'contains_exact')."
+              },
+              "pos": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "index": { "type": "integer" },
+                    "allowed": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  },
+                  "required": ["index", "allowed"]
+                },
+                "description": "Positional constraints for tokenized values."
+              },
+              "note": {
+                "type": "string",
+                "description": "An optional note to display as a tooltip for this rule."
+              },
+              "token_length": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 4,
+                "description": "The number of tokens that make up the parameter key."
+              },
+              "required": {
+                "type": "boolean",
+                "description": "If true, the parameter must exist in the configuration."
+              }
+            },
+            "required": ["rule"]
+          }
+        ]
+      }
+    }
+  },
+  "required": ["rules"]
+}

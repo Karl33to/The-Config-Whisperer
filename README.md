@@ -12,6 +12,8 @@
 
 ### 🌐 [Click here to open the Live Tool](https://Karl33to.github.io/The-Config-Whisperer/)
 
+---
+
 The Config Whisperer is a rules-driven configuration inspection and validation tool for text-based configuration exports.
 
 It reads configuration files, separates lines using token-based matching, and checks the resulting entries against a JSON ruleset. While the initial use case and sample rulesets are focused on Betaflight CLI exports, the core validator is intentionally generic and can be adapted for any line-based configuration format.
@@ -41,6 +43,13 @@ The Whisperer is designed to be adaptable for many different applications:
 3. **Validate:** Click **Validate** to see immediate feedback.
 4. **Edit:** Click any line in the results to open the **Rule Editor** and fine-tune your requirements.
 5. **Export:** Use the **Export ruleset** button to save your customized rules.
+
+## 📁 Example Files
+If you are new to the tool, check out the [**examples/**](./examples) directory. It contains pre-configured rulesets and sample configuration files to help you see the validator in action:
+- **Rulesets**: Sample JSON rules for Betaflight and generic templates.
+- **Configs**: Sample CLI dumps and configuration text files.
+
+Simply download these and drag them into the tool to get started!
 
 ## Deployment
 This project is designed to be hosted on **GitHub Pages**. Simply enable Pages in your repository settings pointing to the `main` branch to make the tool live.
