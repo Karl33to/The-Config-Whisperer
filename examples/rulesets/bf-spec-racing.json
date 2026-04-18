@@ -739,7 +739,7 @@
     "set osd_vbat_pos": "allowed",
     "set osd_vtx_channel_pos": {
       "rule": "nonzero",
-      "note": "This could be either jsut the power level or the preferred Band:Channel:Pwr:Pit",
+      "note": "This could be either just the power level or the preferred Band:Channel:Pwr:Pit",
       "token_length": 2,
       "required": true
     },
