@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A rules-driven configuration inspection and validation tool." />
+    <meta name="theme-color" content="#121821" />
+    <title>The Config Whisperer - A rules-driven config inspection and validation tool</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div id="app">
+      <div class="header-bar">
+        <div class="header-copy">
+          <img
+            src="logo.svg"
+            alt="Logo"
+            class="header-logo"
+          />
+          <div>
+            <h1>The Config Whisperer</h1>
+            <div class="header-subtitle">
+              A rules-driven config inspection and validation tool
+            </div>
+          </div>
+        </div>
+        <details class="header-menu">
+          <summary class="menu-trigger">Menu</summary>
+          <div class="menu-popover">
+            <div class="menu-section">
+              <div class="menu-section-title">Project</div>
+              <ul class="menu-list">
+                <li>
+                  <span class="menu-link-placeholder">
+                    GitHub repo link to be added
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div class="menu-section">
+              <div class="menu-section-title">Betaflight Reference</div>
+              <p class="menu-note">
+                <code>dump</code>: every setting (mostly defaults), current
+                Rate/PID only.<br />
+                <code>dump all</code>: every setting (mostly defaults), all
+                Rate/PID profiles.<br />
+                <code>diff</code>: only changed values, current Rate/PID
+                only.<br />
+                <code>diff all</code>: changed values for all Rate/PID
+                profiles.<br />
+                <code>preset save backup</code>: same as <code>diff all</code>.
+              </p>
+              <ul class="menu-list" style="margin-top: 10px">
+                <li>
+                  <a
+                    class="menu-link"
+                    href="https://www.betaflight.com/docs/development/Modes"
+                    target="_blank"
+                    rel="noreferrer"
+                    >Modes and AUX channel numbers</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="menu-link"
+                    href="https://www.betaflight.com/docs/wiki/guides/current/VTX-CLI-Settings"
+                    target="_blank"
+                    rel="noreferrer"
+                    >VTX CLI settings</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="menu-link"
+                    href="https://github.com/betaflight/betaflight/wiki/Betaflight-CLI-Command-Reference"
+                    target="_blank"
+                    rel="noreferrer"
+                    >CLI command reference</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="menu-link"
+                    href="https://www.betaflight.com/docs/wiki/guides/current/Video-Transmitters"
+                    target="_blank"
+                    rel="noreferrer"
+                    >VTX tables and power labels</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="grid">
+        <!-- LEFT COLUMN: LOAD / SAVE -->
+        <div class="panel">
+          <div class="left-grid">
+            <div class="left-block">
+              <div class="panel-title">Ruleset (JSON)</div>
+              <div id="dropRules" class="dropzone">Drop ruleset.json here</div>
+              <textarea
+                id="rulesText"
+                class="rules-text"
+                placeholder="Or paste ruleset JSON here..."
+              ></textarea>
+              <div class="left-actions">
+                <button id="exportRulesBtn" class="btn btn-secondary btn-block">
+                  Export ruleset
+                </button>
+              </div>
+            </div>
+
+            <div class="left-block left-config">
+              <div class="panel-title">Config Input</div>
+              <div id="dropConfig" class="dropzone">
+                Drop config export here
+              </div>
+              <textarea
+                id="configText"
+                class="config-text"
+                placeholder="Or paste config text here..."
+              ></textarea>
+            </div>
+
+            <button id="validateBtn" class="btn btn-block">Validate</button>
+          </div>
+        </div>
+
+        <!-- MIDDLE COLUMN: VALIDATION OUTPUT -->
+        <div class="panel" id="resultsPanel">
+          <div class="summary">
+            <span id="statusBadge" class="badge"></span>
+            <div class="summary-actions">
+              <div class="search-wrap">
+                <input
+                  id="configSearch"
+                  class="search-input"
+                  type="text"
+                  placeholder="Search lines..."
+                  aria-label="Search lines"
+                />
+                <button
+                  type="button"
+                  id="clearSearch"
+                  class="clear-search hidden"
+                  aria-label="Clear search"
+                >
+                  x
+                </button>
+              </div>
+              <label
+                ><input type="checkbox" id="hidePassing" checked /> Hide passing
+                lines</label
+              >
+            </div>
+          </div>
+
+          <div id="errorList"></div>
+
+          <div id="configOutput" class="config-output"></div>
+        </div>
+
+        <!-- RIGHT COLUMN: RULE EDITOR SIDEBAR -->
+        <div class="panel" id="rulePanel">
+          <h2>Rule Editor</h2>
+          <div id="selectedParamBlock">
+            <div class="field-group">
+              <label>Selected parameter</label>
+              <div id="selectedParamName" class="selected-param" style="font-weight: 600">
+                (none)
+              </div>
+              <div
+                id="selectedParamRemainder"
+                class="selected-param"
+                style="display: none"
+              >
+                (remainder)
+              </div>
+            </div>
+
+            <div id="ruleMissingNotice" class="rule-alert" style="display: none"></div>
+
+            <div class="field-group">
+              <label for="ruleTokenLength">Match tokens</label>
+              <div class="token-length-group" id="ruleTokenLengthGroup">
+                <label class="token-chip"
+                  ><input type="radio" name="tokenLength" value="1" />1</label
+                >
+                <label class="token-chip"
+                  ><input
+                    type="radio"
+                    name="tokenLength"
+                    value="2"
+                    checked
+                  />2</label
+                >
+                <label class="token-chip"
+                  ><input type="radio" name="tokenLength" value="3" />3</label
+                >
+                <label class="token-chip"
+                  ><input type="radio" name="tokenLength" value="4" />4</label
+                >
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="ruleTypeSelect">Rule type</label>
+              <select id="ruleTypeSelect">
+                <option value="allowed">any value</option>
+                <option value="equals">equals</option>
+                <option value="nonzero">nonzero</option>
+                <option value="forbidden">forbidden</option>
+                <option value="contains_all">contains_all</option>
+                <option value="contains_any">contains_any</option>
+                <option value="contains_exact">contains_exact</option>
+                <option value="review">review</option>
+                <option value="positional">positional</option>
+              </select>
+              <small class="hint"
+                >any value: line is allowed with no value check. equals:
+                remainder must match exactly. nonzero: cannot be 0. forbidden:
+                line must not appear. review: flags for manual inspection with a
+                note.</small
+              >
+            </div>
+
+            <div class="field-group" id="ruleValueGroup" style="display: none">
+              <label for="ruleValueInput">Equals / value</label>
+              <input type="text" id="ruleValueInput" />
+              <small
+                >For "equals", the config value must match this exactly.</small
+              >
+            </div>
+
+            <div
+              class="field-group"
+              id="ruleContainsGroup"
+              style="display: none"
+            >
+              <label for="ruleContainsInput"
+                >Contains tokens (comma-separated)</label
+              >
+              <input
+                type="text"
+                id="ruleContainsInput"
+                placeholder="e.g. 25,PIT"
+              />
+              <small class="hint">
+                contains_all: every token must be present anywhere in the
+                line.<br />
+                contains_any: at least one token must be present.<br />
+                contains_exact: tokens must match the remainder exactly (no
+                extras).
+              </small>
+            </div>
+
+            <div class="field-group" id="ruleReviewGroup">
+              <label for="ruleReviewNote">Rule note</label>
+              <textarea
+                id="ruleReviewNote"
+                rows="3"
+                placeholder="Optional context for this rule"
+              ></textarea>
+              <small class="hint"
+                >Optional note shown as a tooltip for this rule.</small
+              >
+            </div>
+
+            <div
+              class="field-group"
+              id="rulePositionalGroup"
+              style="display: none"
+            >
+              <label>Positional constraints</label>
+              <div id="posTableWrapper">
+                <table class="pos-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 50px">Index</th>
+                      <th style="width: 120px">Preview</th>
+                      <th>Allowed tokens</th>
+                      <th style="width: 60px">Del</th>
+                    </tr>
+                  </thead>
+                  <tbody id="posRows"></tbody>
+                </table>
+              </div>
+              <button
+                type="button"
+                id="addPosRowBtn"
+                class="btn btn-secondary btn-compact"
+              >
+                Add position
+              </button>
+              <small>Allowed tokens comma-separated.</small>
+            </div>
+
+            <div class="field-group field-inline">
+              <input type="checkbox" id="ruleRequiredCheckbox" />
+              <label for="ruleRequiredCheckbox"
+                >Required (parameter must exist in config)</label
+              >
+            </div>
+
+            <div class="field-group">
+              <button id="saveParamRuleBtn" class="btn">Save rule</button>
+              <button id="deleteParamRuleBtn" class="btn btn-danger">
+                Remove rule
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      (c) 2025-2026 Karl Payne - Licensed under the
+      <a
+        href="https://www.gnu.org/licenses/gpl-3.0.html"
+        target="_blank"
+        rel="noreferrer"
+        style="color: inherit"
+        >GNU GPL v3</a
+      >
+    </div>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./sw.js").catch((err) =>
+            console.log("SW registration failed: ", err)
+          );
+        });
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
