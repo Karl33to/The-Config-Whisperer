@@ -3,11 +3,14 @@
   <h1>The Config Whisperer</h1>
   <p><strong>A rules-driven configuration inspection and validation tool.</strong></p>
 
+  [![Live Tool](https://img.shields.io/badge/Live-Tool-blueviolet.svg)](https://Karl33to.github.io/The-Config-Whisperer/)
   [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
   [![PWA](https://img.shields.io/badge/PWA-Installable-brightgreen.svg)](https://web.dev/progressive-web-apps/)
 </div>
 
 ---
+
+### 🌐 [Click here to open the Live Tool](https://Karl33to.github.io/The-Config-Whisperer/)
 
 The Config Whisperer is a rules-driven configuration inspection and validation tool for text-based configuration exports.
 
