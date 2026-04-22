@@ -1,14 +1,20 @@
-const CACHE_NAME = 'config-whisperer-v1';
+const CACHE_NAME = 'config-whisperer-v2';
 const ASSETS = [
   './',
   './index.html',
   './style.css',
-  './script.js',
+  './validation.js',
+  './panels.js',
+  './app.js',
   './manifest.json',
   './logo.svg',
   './maskable_icon_x192.png',
   './maskable_icon_x512.png'
 ];
+
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
+});
 
 // Install event: cache assets
 self.addEventListener('install', (event) => {

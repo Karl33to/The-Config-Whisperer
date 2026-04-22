@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div id="updateBanner" class="update-banner" hidden>
+      New version available —
+      <button class="update-banner-btn" id="updateNowBtn">update now</button>
+    </div>
     <div id="app">
       <div class="header-bar">
         <div class="header-copy">
@@ -459,9 +463,23 @@
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("./sw.js")
-            .catch((err) => console.log("SW registration failed: ", err));
+          navigator.serviceWorker.register("./sw.js").then((reg) => {
+            reg.addEventListener("updatefound", () => {
+              const next = reg.installing;
+              next.addEventListener("statechange", () => {
+                if (next.state === "installed" && navigator.serviceWorker.controller) {
+                  document.getElementById("updateBanner").hidden = false;
+                  document.getElementById("updateNowBtn").addEventListener("click", () => {
+                    next.postMessage({ type: "SKIP_WAITING" });
+                  });
+                }
+              });
+            });
+          }).catch((err) => console.log("SW registration failed: ", err));
+
+          navigator.serviceWorker.addEventListener("controllerchange", () => {
+            window.location.reload();
+          });
         });
       }
     </script>
