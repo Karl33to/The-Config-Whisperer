@@ -48,6 +48,10 @@ function readFileIntoTarget(file, target) {
 // Simple drag/drop helper so files can be dropped or clicked to choose a file
 function setupDropzone(zone, target, options = {}) {
   if (!zone) return;
+  // Attach drag events to the nearest .drop-container ancestor so the textarea
+  // is also droppable, without including the buttons below
+  const container = options.container ?? zone.closest(".drop-container") ?? zone;
+
   const fileInput = document.createElement("input");
   fileInput.type = "file";
   if (options.accept) {
@@ -77,12 +81,16 @@ function setupDropzone(zone, target, options = {}) {
     readFileIntoTarget(file, target);
   });
 
-  zone.addEventListener("dragover", (e) => {
+  container.addEventListener("dragover", (e) => {
     e.preventDefault();
     zone.classList.add("dragover");
   });
-  zone.addEventListener("dragleave", () => zone.classList.remove("dragover"));
-  zone.addEventListener("drop", (e) => {
+  container.addEventListener("dragleave", (e) => {
+    if (!container.contains(e.relatedTarget)) {
+      zone.classList.remove("dragover");
+    }
+  });
+  container.addEventListener("drop", (e) => {
     e.preventDefault();
     zone.classList.remove("dragover");
     const file = e.dataTransfer.files[0];
@@ -117,6 +125,11 @@ let currentSearchTerm = "";
 let isNewRuleSelection = false;
 let hasEditedNewRuleEquals = false;
 let suppressRuleValueInputTracking = false;
+
+function updateBackBtn() {
+  const btn = document.getElementById("backToResultsBtn");
+  if (btn) btn.hidden = !selectedParamName;
+}
 
 function getSelectedTokenLength() {
   const radio = document.querySelector(
@@ -561,7 +574,7 @@ function renderResults(data) {
   const errors = document.getElementById("errorList");
   const output = document.getElementById("configOutput");
 
-  panel.style.display = "block";
+  // panel.style.display = "block";
   errors.innerHTML = "";
 
   if (!data.gitOk && data.gitReason) {
@@ -660,7 +673,7 @@ function showEmptyResults(reason, badgeSummary) {
   const errors = document.getElementById("errorList");
   const output = document.getElementById("configOutput");
 
-  panel.style.display = "block";
+  // panel.style.display = "block";
   panel.classList.remove("hidden-pass");
   badge.textContent = badgeSummary || reason;
   badge.className = "badge badge-neutral";
@@ -712,7 +725,7 @@ function updateEmptyState() {
 }
 
 function focusRuleEditor() {
-  const panel = document.getElementById("rulePanel");
+  const panel = document.getElementById("rulesPanel");
   if (panel) {
     panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
@@ -773,6 +786,7 @@ function openRuleEditorForParam(paramName, currentValue) {
   ensureNormalizedRuleset();
   const paramKey = paramName.toLowerCase();
   selectedParamName = paramKey;
+  updateBackBtn();
   selectedParamLastValue = currentValue || "";
 
   const ruleSelect = document.getElementById("ruleTypeSelect");
@@ -863,7 +877,7 @@ function openRuleEditorForParam(paramName, currentValue) {
   }
   renderPosRows(posList, remainderTokens);
   updateRuleMissingNotice();
-  document.getElementById("rulePanel").classList.add("active-highlight");
+  document.getElementById("rulesPanel").classList.add("active-highlight");
   focusRuleEditor();
 }
 
@@ -1019,6 +1033,7 @@ document.getElementById("deleteParamRuleBtn").addEventListener("click", () => {
   if (!confirm("Delete rule for " + selectedParamName + "?")) return;
   delete ruleset.rules[selectedParamName.toLowerCase()];
   selectedParamName = null;
+  updateBackBtn();
   selectedParamLastValue = "";
   selectedLineIdx = null;
   lastSelectedTokens = [];
@@ -1028,7 +1043,7 @@ document.getElementById("deleteParamRuleBtn").addEventListener("click", () => {
   if (lastSelectedLineElem)
     lastSelectedLineElem.classList.remove("line-selected");
   lastSelectedLineElem = null;
-  document.getElementById("rulePanel").classList.remove("active-highlight");
+  document.getElementById("rulesPanel").classList.remove("active-highlight");
   document.getElementById("selectedParamName").textContent = "(none)";
   document.getElementById("selectedParamRemainder").style.display = "none";
   const ruleNotice = document.getElementById("ruleMissingNotice");
@@ -1067,6 +1082,7 @@ document.getElementById("validateBtn").addEventListener("click", () => {
   renderResults(res);
   document.getElementById("hidePassing").checked = true;
   document.getElementById("resultsPanel").classList.add("hidden-pass");
+  showPanel("results");
 });
 
 document.getElementById("hidePassing").addEventListener("change", (e) => {
@@ -1144,6 +1160,7 @@ document.getElementById("configOutput").addEventListener("click", (e) => {
   // toggle selection
   if (selectedParamName === param) {
     selectedParamName = null;
+    updateBackBtn();
     selectedParamLastValue = "";
     selectedLineIdx = null;
     isNewRuleSelection = false;
@@ -1152,7 +1169,7 @@ document.getElementById("configOutput").addEventListener("click", (e) => {
       lastSelectedLineElem.classList.remove("line-selected");
     lastSelectedLineElem = null;
     lastSelectedTokens = [];
-    document.getElementById("rulePanel").classList.remove("active-highlight");
+    document.getElementById("rulesPanel").classList.remove("active-highlight");
     document.getElementById("selectedParamName").textContent = "(none)";
     document.getElementById("selectedParamRemainder").style.display = "none";
     const ruleNotice = document.getElementById("ruleMissingNotice");
@@ -1177,6 +1194,7 @@ document.getElementById("configOutput").addEventListener("click", (e) => {
   selectedLineIdx = idx;
 
   openRuleEditorForParam(param, val);
+  showPanel("rules");
 });
 
 ["rulesText", "configText"].forEach((id) => {

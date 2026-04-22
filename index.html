@@ -1,23 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="A rules-driven configuration inspection and validation tool." />
+    <meta
+      name="description"
+      content="A rules-driven configuration inspection and validation tool."
+    />
     <meta name="theme-color" content="#121821" />
-    <title>The Config Whisperer - A rules-driven config inspection and validation tool</title>
+    <title>
+      The Config Whisperer - A rules-driven config inspection and validation
+      tool
+    </title>
     <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div id="app">
       <div class="header-bar">
         <div class="header-copy">
-          <img
-            src="logo.svg"
-            alt="Logo"
-            class="header-logo"
-          />
+          <img src="logo.svg" alt="Logo" class="header-logo" />
           <div>
             <h1>The Config Whisperer</h1>
             <div class="header-subtitle">
@@ -25,87 +27,41 @@
             </div>
           </div>
         </div>
-        <details class="header-menu">
-          <summary class="menu-trigger">Menu</summary>
-          <div class="menu-popover">
-            <div class="menu-section">
-              <div class="menu-section-title">Project</div>
-              <ul class="menu-list">
-                <li>
-                  <span class="menu-link-placeholder">
-                    GitHub repo link to be added
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div class="menu-section">
-              <div class="menu-section-title">Betaflight Reference</div>
-              <p class="menu-note">
-                <code>dump</code>: every setting (mostly defaults), current
-                Rate/PID only.<br />
-                <code>dump all</code>: every setting (mostly defaults), all
-                Rate/PID profiles.<br />
-                <code>diff</code>: only changed values, current Rate/PID
-                only.<br />
-                <code>diff all</code>: changed values for all Rate/PID
-                profiles.<br />
-                <code>preset save backup</code>: same as <code>diff all</code>.
-              </p>
-              <ul class="menu-list" style="margin-top: 10px">
-                <li>
-                  <a
-                    class="menu-link"
-                    href="https://www.betaflight.com/docs/development/Modes"
-                    target="_blank"
-                    rel="noreferrer"
-                    >Modes and AUX channel numbers</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="menu-link"
-                    href="https://www.betaflight.com/docs/wiki/guides/current/VTX-CLI-Settings"
-                    target="_blank"
-                    rel="noreferrer"
-                    >VTX CLI settings</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="menu-link"
-                    href="https://github.com/betaflight/betaflight/wiki/Betaflight-CLI-Command-Reference"
-                    target="_blank"
-                    rel="noreferrer"
-                    >CLI command reference</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="menu-link"
-                    href="https://www.betaflight.com/docs/wiki/guides/current/Video-Transmitters"
-                    target="_blank"
-                    rel="noreferrer"
-                    >VTX tables and power labels</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </div>
-        </details>
+        <button class="header-help-btn" data-panel="help" aria-controls="helpPanel">
+          Help
+        </button>
       </div>
+
+      <nav class="menu" role="tablist" aria-label="Sections">
+        <button role="tab" data-panel="inputs" aria-controls="inputsPanel">
+          Inputs
+        </button>
+        <button role="tab" data-panel="results" aria-controls="resultsPanel">
+          Results
+        </button>
+        <button role="tab" data-panel="rules" aria-controls="rulesPanel">
+          Rules
+        </button>
+        <button role="tab" data-panel="help" aria-controls="helpPanel">
+          Help
+        </button>
+      </nav>
 
       <div class="grid">
         <!-- LEFT COLUMN: LOAD / SAVE -->
-        <div class="panel">
+        <section id="inputsPanel" class="panel" role="tabpanel">
+          <h2>Inputs</h2>
           <div class="left-grid">
             <div class="left-block">
               <div class="panel-title">Ruleset (JSON)</div>
-              <div id="dropRules" class="dropzone">Drop ruleset.json here</div>
-              <textarea
-                id="rulesText"
-                class="rules-text"
-                placeholder="Or paste ruleset JSON here..."
-              ></textarea>
+              <div class="drop-container">
+                <div id="dropRules" class="dropzone">Drop ruleset.json here</div>
+                <textarea
+                  id="rulesText"
+                  class="rules-text"
+                  placeholder="Or paste ruleset JSON here..."
+                ></textarea>
+              </div>
               <div class="left-actions">
                 <button id="exportRulesBtn" class="btn btn-secondary btn-block">
                   Export ruleset
@@ -115,22 +71,24 @@
 
             <div class="left-block left-config">
               <div class="panel-title">Config Input</div>
-              <div id="dropConfig" class="dropzone">
-                Drop config export here
+              <div class="drop-container">
+                <div id="dropConfig" class="dropzone">
+                  Drop config export here
+                </div>
+                <textarea
+                  id="configText"
+                  class="config-text"
+                  placeholder="Or paste config text here..."
+                ></textarea>
               </div>
-              <textarea
-                id="configText"
-                class="config-text"
-                placeholder="Or paste config text here..."
-              ></textarea>
             </div>
 
             <button id="validateBtn" class="btn btn-block">Validate</button>
           </div>
-        </div>
+        </section>
 
         <!-- MIDDLE COLUMN: VALIDATION OUTPUT -->
-        <div class="panel" id="resultsPanel">
+        <section id="resultsPanel" class="panel" role="tabpanel" hidden>
           <div class="summary">
             <span id="statusBadge" class="badge"></span>
             <div class="summary-actions">
@@ -161,15 +119,20 @@
           <div id="errorList"></div>
 
           <div id="configOutput" class="config-output"></div>
-        </div>
+        </section>
 
         <!-- RIGHT COLUMN: RULE EDITOR SIDEBAR -->
-        <div class="panel" id="rulePanel">
+        <section id="rulesPanel" class="panel" role="tabpanel" hidden>
           <h2>Rule Editor</h2>
+          <button id="backToResultsBtn" class="btn btn-secondary" hidden>← Results</button>
           <div id="selectedParamBlock">
             <div class="field-group">
               <label>Selected parameter</label>
-              <div id="selectedParamName" class="selected-param" style="font-weight: 600">
+              <div
+                id="selectedParamName"
+                class="selected-param"
+                style="font-weight: 600"
+              >
                 (none)
               </div>
               <div
@@ -181,7 +144,11 @@
               </div>
             </div>
 
-            <div id="ruleMissingNotice" class="rule-alert" style="display: none"></div>
+            <div
+              id="ruleMissingNotice"
+              class="rule-alert"
+              style="display: none"
+            ></div>
 
             <div class="field-group">
               <label for="ruleTokenLength">Match tokens</label>
@@ -312,7 +279,171 @@
               </button>
             </div>
           </div>
-        </div>
+        </section>
+
+        <!-- HELP -->
+        <section id="helpPanel" class="panel" role="tabpanel" hidden>
+          <h2>Help</h2>
+          <div class="menu-section">
+            <div class="menu-section-title">Project</div>
+            <ul class="menu-list">
+              <li>
+                <a
+                  class="menu-link"
+                  href="https://github.com/Karl33to/The-Config-Whisperer"
+                  target="_blank"
+                  rel="noreferrer"
+                  >The Config Whisperer on GitHub</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="menu-section">
+            <div class="menu-section-title">Workflow</div>
+            <p class="menu-note">
+              Paste or drop a Betaflight CLI export (<code>diff all</code> or
+              <code>preset save backup</code> recommended) into the Config Input
+              box, then paste or drop a ruleset JSON into the Ruleset box and
+              press <strong>Validate</strong>.<br /><br />
+              To build a ruleset from scratch: validate a config with no ruleset
+              loaded, then click any line in the results to open the Rule Editor
+              and assign rules. Use <strong>Export ruleset</strong> to save your
+              work as a <code>.json</code> file that can be shared or re-imported
+              later.
+            </p>
+          </div>
+          <div class="menu-section">
+            <div class="menu-section-title">Ruleset Format</div>
+            <p class="menu-note">
+              A ruleset is a JSON object with a <code>rules</code> key. Each
+              entry maps a config line prefix to a rule:
+            </p>
+            <pre class="menu-note" style="margin-top:6px;overflow-x:auto">{
+  "rules": {
+    "set motor_pwm_rate": { "rule": "equals", "value": "480" },
+    "aux 0": { "rule": "allowed" },
+    "serial 0": { "rule": "review", "note": "Check port config" }
+  }
+}</pre>
+            <table class="rule-ref-table">
+              <thead>
+                <tr><th>Rule type</th><th>Behaviour</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>allowed</code></td>
+                  <td>Line is permitted; value is not checked.</td>
+                </tr>
+                <tr>
+                  <td><code>equals</code></td>
+                  <td>Remainder must exactly match the <code>value</code> field.</td>
+                </tr>
+                <tr>
+                  <td><code>nonzero</code></td>
+                  <td>Value must not be <code>0</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>forbidden</code></td>
+                  <td>Line must not appear in the config.</td>
+                </tr>
+                <tr>
+                  <td><code>contains_all</code></td>
+                  <td>Every token in the <code>contains_all</code> array must appear somewhere in the line.</td>
+                </tr>
+                <tr>
+                  <td><code>contains_any</code></td>
+                  <td>At least one token in the <code>contains_any</code> array must appear.</td>
+                </tr>
+                <tr>
+                  <td><code>contains_exact</code></td>
+                  <td>The remainder must contain exactly the tokens in the <code>tokens</code> array — no more, no less.</td>
+                </tr>
+                <tr>
+                  <td><code>positional</code></td>
+                  <td>Each entry in <code>pos</code> specifies an index and an <code>allowed</code> token list for that position in the remainder.</td>
+                </tr>
+                <tr>
+                  <td><code>review</code></td>
+                  <td>Flags the line for manual inspection. An optional <code>note</code> is shown as a tooltip.</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="menu-note" style="margin-top:var(--space-2)">
+              Add <code>"required": true</code> to any rule to fail validation
+              when that line is absent from the config. A <code>firmware</code>
+              key with an <code>allowed_git_hashes</code> array can be used to
+              enforce a specific firmware build.
+            </p>
+          </div>
+          <div class="menu-section">
+            <div class="menu-section-title">Betaflight Reference</div>
+            <table class="rule-ref-table">
+              <thead>
+                <tr><th>Command</th><th>What it exports</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>diff</code></td>
+                  <td>Changed values only, current Rate/PID profile.</td>
+                </tr>
+                <tr>
+                  <td><code>diff all</code></td>
+                  <td>Changed values for all Rate/PID profiles.</td>
+                </tr>
+                <tr>
+                  <td><code>preset save backup</code></td>
+                  <td>Same as <code>diff all</code> — recommended for backups.</td>
+                </tr>
+                <tr>
+                  <td><code>dump</code></td>
+                  <td>Every setting (mostly defaults), current Rate/PID profile.</td>
+                </tr>
+                <tr>
+                  <td><code>dump all</code></td>
+                  <td>Every setting (mostly defaults), all Rate/PID profiles.</td>
+                </tr>
+              </tbody>
+            </table>
+            <ul class="menu-list" style="margin-top: var(--space-3)">
+              <li>
+                <a
+                  class="menu-link"
+                  href="https://www.betaflight.com/docs/development/Modes"
+                  target="_blank"
+                  rel="noreferrer"
+                  >Modes and AUX channel numbers</a
+                >
+              </li>
+              <li>
+                <a
+                  class="menu-link"
+                  href="https://www.betaflight.com/docs/wiki/guides/current/VTX-CLI-Settings"
+                  target="_blank"
+                  rel="noreferrer"
+                  >VTX CLI settings</a
+                >
+              </li>
+              <li>
+                <a
+                  class="menu-link"
+                  href="https://github.com/betaflight/betaflight/wiki/Betaflight-CLI-Command-Reference"
+                  target="_blank"
+                  rel="noreferrer"
+                  >CLI command reference</a
+                >
+              </li>
+              <li>
+                <a
+                  class="menu-link"
+                  href="https://www.betaflight.com/docs/wiki/guides/current/Video-Transmitters"
+                  target="_blank"
+                  rel="noreferrer"
+                  >VTX tables and power labels</a
+                >
+              </li>
+            </ul>
+          </div>
+        </section>
       </div>
     </div>
     <div class="footer">
@@ -328,12 +459,14 @@
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          navigator.serviceWorker.register("./sw.js").catch((err) =>
-            console.log("SW registration failed: ", err)
-          );
+          navigator.serviceWorker
+            .register("./sw.js")
+            .catch((err) => console.log("SW registration failed: ", err));
         });
       }
     </script>
-    <script src="script.js"></script>
+    <script src="validation.js"></script>
+    <script src="panels.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>

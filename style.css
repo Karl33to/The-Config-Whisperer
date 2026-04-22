@@ -1,51 +1,57 @@
+/* ================================================================
+   1. SETTINGS — design tokens
+   ================================================================ */
+
 :root {
-  --bg: #0a191f;
-  --surface: #0e2229;
-  --surface-2: #071217;
-  --border: #142d36;
-  --text: #f5f5f5;
-  --muted: #8da2aa;
-  --muted-2: #cbd5e1;
-  --accent: #00d2eb;
+  --bg:            #0a191f;
+  --surface:       #0e2229;
+  --surface-2:     #071217;
+  --border:        #142d36;
+  --text:          #f5f5f5;
+  --muted:         #8da2aa;
+  --muted-2:       #cbd5e1;
+  --accent:        #00d2eb;
   --accent-strong: #00ff88;
   --accent-border: #1a3d4a;
-  --danger: #7f1d1d;
+  --danger:        #7f1d1d;
   --danger-strong: #991b1b;
-  --radius: 8px;
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
+  --radius:        8px;
+  --space-1:       4px;
+  --space-2:       8px;
+  --space-3:       12px;
+  --space-4:       16px;
 }
 
-* {
+/* ================================================================
+   2. BASE — reset + typographic defaults
+   ================================================================ */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
+
 html,
 body {
   height: 100%;
 }
+
 body {
-  font-family: system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
   margin: 0;
   padding: var(--space-4);
   height: 100vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
-#app {
-  max-width: none;
-  width: 100%;
-  margin: 0;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+h1,
+h2 {
+  margin: 0 0 var(--space-3) 0;
 }
 
 h1 {
@@ -53,135 +59,271 @@ h1 {
   font-size: 26px;
   line-height: 1.2;
 }
-.header-logo {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  flex-shrink: 0;
+
+h2 {
+  font-size: 19px;
 }
-.header-copy {
+
+small,
+.hint {
+  color: #9ca3af;
+  font-size: 11px;
+}
+
+/* Ensure [hidden] always overrides display rules from class selectors */
+[hidden] { display: none !important; }
+
+/* ================================================================
+   3. LAYOUT — top-level structural containers
+   ================================================================ */
+
+#app {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
   display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-3);
 }
-.header-subtitle {
-  color: var(--muted);
-  font-size: 13px;
-  white-space: nowrap;
+
+.grid {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
+
+/* Inputs panel internal layout */
+.left-grid {
+  display: grid;
+  grid-template-rows: 1fr 1fr auto;
+  gap: 10px;
+  min-height: 0;
+  flex: 1;
+}
+
+.left-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 0;
+}
+
+.left-actions {
+  margin-top: auto;
+}
+
+.rules-text,
+.config-text {
+  flex: 1;
+}
+
+/* ================================================================
+   4. COMPONENTS
+   ================================================================ */
+
+/* ---- 4a. Header ---- */
+
 .header-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
 }
-.header-menu {
-  position: relative;
+
+.header-copy {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.header-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
   flex-shrink: 0;
 }
-.menu-trigger {
-  list-style: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--accent);
-  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-  color: #121821;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 700;
-  user-select: none;
-  box-shadow: 0 10px 24px rgba(0, 210, 235, 0.2);
+
+.header-subtitle {
+  color: var(--muted);
+  font-size: 13px;
 }
-.menu-trigger::-webkit-details-marker {
+
+.header-help-btn {
   display: none;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-.menu-trigger:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 10px 24px rgba(0, 255, 136, 0.3);
+
+.header-help-btn:hover {
+  background: var(--surface-2);
+  border-color: var(--accent-border);
+  color: var(--text);
 }
-.header-menu[open] .menu-trigger {
-  background: var(--accent-strong);
+
+.header-help-btn[aria-selected="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #121821;
+  font-weight: 700;
 }
-.menu-popover {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: 320px;
-  max-width: min(320px, calc(100vw - 32px));
-  padding: 12px;
-  border-radius: var(--radius);
-  border: 1px solid var(--accent-border);
-  background: var(--surface);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
-  z-index: 20;
-}
+
+
 .menu-section + .menu-section {
-  margin-top: 12px;
-  padding-top: 12px;
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
   border-top: 1px solid var(--border);
 }
+
 .menu-section-title {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--muted);
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
 }
+
 .menu-note {
   color: var(--muted-2);
   font-size: 12px;
   line-height: 1.45;
   margin: 0;
 }
+
 .menu-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
 .menu-list li + li {
   margin-top: 6px;
 }
+
 .menu-link {
   color: var(--accent);
   text-decoration: none;
   font-size: 12px;
 }
+
 .menu-link:hover {
   color: var(--accent-strong);
 }
+
 .menu-link-placeholder {
   color: var(--muted);
   font-size: 12px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: minmax(340px, 360px) minmax(0, 1fr) minmax(
-      360px,
-      440px
-    );
-  gap: var(--space-4);
-  flex: 1;
-  min-height: 0;
+.rule-ref-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: var(--space-2);
 }
+
+.rule-ref-table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 2px var(--space-2) 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.rule-ref-table td {
+  padding: 4px var(--space-2) 4px 0;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted-2);
+  line-height: 1.4;
+}
+
+.rule-ref-table td:first-child {
+  white-space: nowrap;
+  color: var(--text);
+}
+
+/* ---- 4b. Navigation tabs ---- */
+
+nav.menu {
+  display: flex;
+  gap: 2px;
+  padding: var(--space-1);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+nav.menu > button {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: none;
+  border-radius: calc(var(--radius) - 2px);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+nav.menu > button:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+nav.menu > button[aria-selected="true"] {
+  background: var(--accent);
+  color: #121821;
+  font-weight: 700;
+}
+
+/* ---- 4c. Panels ---- */
 
 .panel {
   background: var(--surface);
   border: 1px solid var(--border);
   padding: var(--space-3);
   border-radius: var(--radius);
-  transition:
-    box-shadow 0.15s,
-    border-color 0.15s;
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
   min-height: 0;
+  opacity: 0;
+  transform: translateX(0);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.15s,
+    border-color 0.15s;
 }
+
+/* Directional entry starting positions — must precede data-active rule */
+.panel[data-slide-from="right"] { transform: translateX(40px); }
+.panel[data-slide-from="left"]  { transform: translateX(-40px); }
+
+/* Directional exit ending positions */
+.panel[data-slide-to="left"]    { transform: translateX(-40px); }
+.panel[data-slide-to="right"]   { transform: translateX(40px); }
+
+.panel[data-active="true"] {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 .panel.active-highlight {
   border-color: #2563eb;
   box-shadow: 0 0 0 1px #2563eb;
@@ -195,10 +337,27 @@ h1 {
   margin-bottom: var(--space-2);
 }
 
+#resultsPanel {
+  gap: var(--space-4);
+}
+
+#rulesPanel {
+  overflow-y: auto;
+}
+
+/* ---- 4d. Dropzones ---- */
+
+.drop-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1;
+  min-height: 0;
+}
+
 .dropzone {
   border: 2px dashed var(--accent-border);
   padding: var(--space-3);
-  margin-bottom: var(--space-2);
   border-radius: var(--radius);
   text-align: center;
   background: var(--surface-2);
@@ -208,26 +367,14 @@ h1 {
     background 0.15s,
     box-shadow 0.15s;
 }
+
 .dropzone.dragover {
   border-color: var(--muted-2);
   background: #242433;
   box-shadow: 0 0 0 1px var(--muted-2);
 }
 
-textarea {
-  width: 100%;
-  padding: 8px;
-  background: var(--surface-2);
-  border: 1px solid #333;
-  border-radius: 6px;
-  color: #eee;
-  resize: vertical;
-  font-family: "JetBrains Mono ExtraLight", monospace;
-  font-size: 12px;
-  margin-bottom: var(--space-2);
-  box-sizing: border-box;
-  max-width: 100%;
-}
+/* ---- 4e. Buttons ---- */
 
 .btn {
   display: inline-flex;
@@ -249,29 +396,36 @@ textarea {
     border-color 0.15s,
     color 0.15s;
 }
+
 .btn:hover {
   background: var(--accent-strong);
 }
+
 .btn-block {
   width: 100%;
 }
+
 .btn-secondary {
   background: var(--surface);
-  border: 1px solid var(--accent-border);
+  border-color: var(--accent-border);
   color: var(--accent);
 }
+
 .btn-secondary:hover {
   background: var(--accent-border);
   color: #fff;
 }
+
 .btn-danger {
   background: var(--danger);
-  border: 1px solid var(--danger-strong);
+  border-color: var(--danger-strong);
   color: #fff;
 }
+
 .btn-danger:hover {
   background: var(--danger-strong);
 }
+
 .btn-compact {
   padding: 6px 10px;
   font-size: 11px;
@@ -280,12 +434,61 @@ textarea {
   margin-right: 0;
 }
 
-/* Results */
+/* ---- 4f. Form inputs & fields ---- */
+
+textarea {
+  width: 100%;
+  padding: var(--space-2);
+  background: var(--surface-2);
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #eee;
+  resize: vertical;
+  font-family: "JetBrains Mono ExtraLight", monospace;
+  font-size: 12px;
+  margin-bottom: var(--space-2);
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.field-group {
+  margin-bottom: var(--space-2);
+  font-size: 13px;
+}
+
+.field-group label {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.field-group input[type="text"],
+.field-group input[type="number"],
+.field-group select,
+.field-group textarea {
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #0c0c11;
+  color: #eee;
+  font-family: inherit;
+  font-size: 12px;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.field-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+/* ---- 4g. Results view ---- */
 
 .summary {
   display: flex;
   align-items: center;
-  margin-bottom: var(--space-2);
   gap: var(--space-2);
   flex-wrap: wrap;
 }
@@ -310,6 +513,7 @@ textarea {
   min-width: 200px;
   max-width: 320px;
 }
+
 .search-input {
   background: transparent;
   border: none;
@@ -318,6 +522,7 @@ textarea {
   width: 100%;
   font-size: 12px;
 }
+
 .clear-search {
   border: none;
   background: none;
@@ -326,9 +531,11 @@ textarea {
   padding: 4px;
   line-height: 1;
 }
+
 .clear-search:hover {
   color: #fff;
 }
+
 .clear-search.hidden {
   opacity: 0;
   pointer-events: none;
@@ -341,7 +548,7 @@ textarea {
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   white-space: nowrap;
 }
 
@@ -350,16 +557,19 @@ textarea {
   color: #4ade80;
   border: 1px solid #15803d;
 }
+
 .badge-fail {
   background: #7f1d1d;
   color: #fca5a5;
   border: 1px solid #b91c1c;
 }
+
 .badge-neutral {
   background: #1f2937;
   color: #cbd5e1;
   border: 1px solid #334155;
 }
+
 .badge-review {
   background: #854d0e;
   color: #fbbf24;
@@ -371,18 +581,16 @@ textarea {
   max-height: 140px;
   overflow-y: auto;
   font-size: 12px;
-  margin-bottom: 8px;
 }
 
 .config-output {
   flex: 1;
   min-height: 240px;
-  max-height: calc(100vh - 220px);
   overflow-y: auto;
   background: #0b0b0f;
   border: 1px solid #222;
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: var(--radius);
+  padding: var(--space-2);
   font-family: "JetBrains Mono ExtraLight", monospace;
   font-size: 12px;
 }
@@ -399,22 +607,20 @@ textarea {
   cursor: pointer;
   transition: outline 0.1s;
 }
+
 .line-text {
   flex: 1;
 }
-.line-pass {
-  background: #052e16;
-}
-.line-fail {
-  background: #7f1d1d;
-}
-.line-review {
-  background: #8a4f0f;
-}
+
+.line-pass   { background: #052e16; }
+.line-fail   { background: #7f1d1d; }
+.line-review { background: #8a4f0f; }
+
 .line[data-param]:hover {
   outline: 1px solid #fff;
   outline-offset: -1px;
 }
+
 .line-selected {
   background: var(--accent);
   color: #121821;
@@ -425,58 +631,14 @@ textarea {
   display: none;
 }
 
-/* Rule editor (right panel) */
-#rulePanel h2 {
-  margin: 0 0 12px;
-  font-size: 19px;
-}
-#rulePanel {
-  overflow-y: auto;
-}
+/* ---- 4h. Rule editor ---- */
 
 .rule-section {
   border-top: 1px solid #222;
-  padding-top: 8px;
-  margin-top: 8px;
+  padding-top: var(--space-2);
+  margin-top: var(--space-2);
 }
 
-.field-group {
-  margin-bottom: 8px;
-  font-size: 13px;
-}
-.field-group label {
-  display: block;
-  margin-bottom: 2px;
-}
-.field-group input[type="text"],
-.field-group input[type="number"],
-.field-group select,
-.field-group textarea {
-  width: 100%;
-  padding: 4px 6px;
-  border-radius: 4px;
-  border: 1px solid #333;
-  background: #0c0c11;
-  color: #eee;
-  font-family: inherit;
-  font-size: 12px;
-  box-sizing: border-box;
-  max-width: 100%;
-}
-.field-inline {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-}
-
-small {
-  color: #9ca3af;
-  font-size: 11px;
-}
-.callout-strong {
-  color: #4ade80;
-}
 .rule-alert {
   border: 1px solid #b45309;
   background: #2a1b0a;
@@ -487,19 +649,9 @@ small {
   line-height: 1.4;
   margin-bottom: var(--space-2);
 }
+
 .rule-alert strong {
   color: #fde68a;
-}
-
-.footer {
-  margin-top: 10px;
-  padding: 8px 12px;
-  background: #111;
-  border: 1px solid #222;
-  border-radius: 8px;
-  text-align: center;
-  font-size: 11px;
-  color: #9ca3af;
 }
 
 .selected-param {
@@ -511,10 +663,12 @@ small {
   box-sizing: border-box;
   padding: 6px 10px;
 }
+
 #selectedParamName {
   background: var(--surface);
   color: var(--accent);
 }
+
 #selectedParamRemainder {
   background: var(--surface-2);
   color: var(--muted-2);
@@ -526,6 +680,7 @@ small {
   display: flex;
   gap: 6px;
 }
+
 .token-chip {
   background: #1f2937;
   border: 1px solid #334155;
@@ -535,9 +690,11 @@ small {
   font-size: 12px;
   user-select: none;
 }
+
 .token-chip input {
   display: none;
 }
+
 .token-chip.active {
   background: var(--accent);
   border-color: var(--accent);
@@ -547,7 +704,7 @@ small {
 .remainder-preview {
   font-family: "JetBrains Mono ExtraLight", monospace;
   font-size: 12px;
-  color: #cbd5e1;
+  color: var(--muted-2);
   margin-top: 4px;
 }
 
@@ -557,6 +714,7 @@ small {
   margin-bottom: 6px;
   table-layout: fixed;
 }
+
 .pos-table th,
 .pos-table td {
   padding: 4px 6px;
@@ -564,18 +722,21 @@ small {
   border: 1px solid #334155;
   background: #0c0c11;
 }
+
 .pos-table th {
   background: #1f2937;
-  color: #cbd5e1;
+  color: var(--muted-2);
   text-align: left;
 }
+
 .pos-table .pos-preview {
   font-family: "JetBrains Mono ExtraLight", monospace;
-  color: #cbd5e1;
+  color: var(--muted-2);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .pos-table input[type="number"],
 .pos-table input[type="text"] {
   width: 100%;
@@ -588,40 +749,100 @@ small {
   font-size: 12px;
   box-sizing: border-box;
 }
+
 .pos-table .btn {
   margin: 0;
   width: 100%;
 }
 
+/* ---- 4i. Footer ---- */
+
+.footer {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: var(--radius);
+  text-align: center;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* ================================================================
+   5. UTILITIES
+   ================================================================ */
+
 .placeholder {
   border: 1px dashed #333;
-  border-radius: 8px;
+  border-radius: var(--radius);
   padding: 14px;
   text-align: center;
   color: #9ca3af;
   background: #0c0c11;
 }
 
-/* Left panel layout */
-.left-grid {
-  display: grid;
-  grid-template-rows: 1fr 1fr auto;
-  gap: 10px;
-  min-height: 0;
-  flex: 1;
+.callout-strong {
+  color: #4ade80;
 }
-.left-block {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-height: 0;
+
+/* ================================================================
+   6. RESPONSIVE
+   ================================================================ */
+
+@media (max-width: 390px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  .header-subtitle {
+    display: none;
+  }
 }
-.rules-text {
-  flex: 1;
-}
-.config-text {
-  flex: 1;
-}
-.left-actions {
-  margin-top: auto;
+
+/* ---- Desktop multi-column layout ---- */
+
+@media (min-width: 1200px) {
+  #backToResultsBtn {
+    display: none;
+  }
+
+  .grid {
+    flex-direction: row;
+    gap: var(--space-4);
+  }
+
+  /* Restore panels to flex flow for the side-by-side desktop layout */
+  #inputsPanel,
+  #resultsPanel,
+  #rulesPanel,
+  #helpPanel {
+    position: static;
+  }
+
+  /* Side panels ~20%, results panel ~60% */
+  #inputsPanel,
+  #rulesPanel {
+    flex: 1;
+    min-width: 0;
+  }
+
+  #resultsPanel {
+    flex: 3;
+    min-width: 0;
+  }
+
+  /* Help panel is a fixed-width side column when shown */
+  #helpPanel {
+    flex: 0 0 300px;
+    min-width: 0;
+  }
+
+  /* Nav is replaced by the header help button on desktop */
+  nav.menu {
+    display: none;
+  }
+
+  .header-help-btn {
+    display: inline-flex;
+  }
 }
