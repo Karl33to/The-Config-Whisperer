@@ -11,8 +11,8 @@
     "# beacon": "allowed",
     "# beeper": "allowed",
     "# betaflight": {
-      "rule": "contains_any",
-      "contains_any": [
+      "rule": "one_of",
+      "values": [
         "aafe4102e"
       ],
       "note": "Looks for the GIT hashes, usually the first 9 letters. Loaded with all version from 4.50 onwards",
@@ -618,7 +618,8 @@
     "set osd_aux_scale": "allowed",
     "set osd_aux_symbol": "allowed",
     "set osd_avg_cell_voltage_pos": {
-      "rule": "nonzero",
+      "rule": "not_equals",
+      "value": "0",
       "required": true
     },
     "set osd_battery_usage_pos": "allowed",
@@ -632,7 +633,8 @@
     "set osd_core_temp_alarm": "allowed",
     "set osd_core_temp_pos": "allowed",
     "set osd_craft_name_pos": {
-      "rule": "nonzero",
+      "rule": "not_equals",
+      "value": "0",
       "note": "Required for the team name",
       "token_length": 2,
       "required": true
@@ -649,7 +651,8 @@
     "set osd_esc_rpm_alarm": "allowed",
     "set osd_esc_rpm_freq_pos": "allowed",
     "set osd_esc_rpm_pos": {
-      "rule": "nonzero",
+      "rule": "not_equals",
+      "value": "0",
       "token_length": 2,
       "required": true
     },
@@ -738,7 +741,8 @@
     "set osd_use_quick_menu": "allowed",
     "set osd_vbat_pos": "allowed",
     "set osd_vtx_channel_pos": {
-      "rule": "nonzero",
+      "rule": "not_equals",
+      "value": "0",
       "note": "This could be either just the power level or the preferred Band:Channel:Pwr:Pit",
       "token_length": 2,
       "required": true
@@ -1009,8 +1013,8 @@
       "required": true
     },
     "vtxtable powerlevels": {
-      "rule": "contains_any",
-      "contains_any": [
+      "rule": "one_of",
+      "values": [
         "2",
         "3"
       ],

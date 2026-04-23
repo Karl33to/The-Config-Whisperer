@@ -91,6 +91,9 @@ const el = {
   ruleContainsGroup:      document.getElementById("ruleContainsGroup"),
   ruleReviewNote:         document.getElementById("ruleReviewNote"),
   ruleRequiredCheckbox:   document.getElementById("ruleRequiredCheckbox"),
+  ruleRangeGroup:         document.getElementById("ruleRangeGroup"),
+  ruleRangeMin:           document.getElementById("ruleRangeMin"),
+  ruleRangeMax:           document.getElementById("ruleRangeMax"),
   rulePositionalGroup:    document.getElementById("rulePositionalGroup"),
   ruleTokenLengthGroup:   document.getElementById("ruleTokenLengthGroup"),
   posRows:                document.getElementById("posRows"),
@@ -182,11 +185,10 @@ function updateBackBtn() {
 
 function updateRuleEditorVisibility() {
   const type = el.ruleTypeSelect.value;
-  el.ruleValueGroup.style.display = type === "equals" ? "block" : "none";
+  el.ruleValueGroup.style.display = type === "equals" || type === "not_equals" ? "block" : "none";
+  el.ruleRangeGroup.style.display = type === "range" ? "block" : "none";
   el.ruleContainsGroup.style.display =
-    type === "contains_all" || type === "contains_any" || type === "contains_exact"
-      ? "block"
-      : "none";
+    type === "one_of" || type === "includes_all" || type === "token_set" ? "block" : "none";
   el.rulePositionalGroup.style.display = type === "positional" ? "block" : "none";
 }
 
@@ -439,10 +441,13 @@ function clearRuleEditor() {
   el.ruleMissingNotice.innerHTML = "";
   el.ruleTypeSelect.value = "allowed";
   el.ruleValueInput.value = "";
+  el.ruleRangeMin.value = "";
+  el.ruleRangeMax.value = "";
   el.ruleContainsInput.value = "";
   el.ruleReviewNote.value = "";
   el.ruleRequiredCheckbox.checked = false;
   el.ruleValueGroup.style.display = "none";
+  el.ruleRangeGroup.style.display = "none";
   el.ruleContainsGroup.style.display = "none";
 }
 
@@ -484,6 +489,8 @@ function openRuleEditorForParam(paramName, currentValue) {
   let type = "allowed";
   let required = false;
   let value = "";
+  let rangeMin = "";
+  let rangeMax = "";
   let containsList = [];
   let tokenLen = 2;
   let posList = [];
@@ -500,10 +507,14 @@ function openRuleEditorForParam(paramName, currentValue) {
     type = rule.rule || "allowed";
     required = !!rule.required;
     if (rule.note != null) ruleNote = String(rule.note);
-    if (type === "equals" && rule.value != null) value = String(rule.value);
-    else if (type === "contains_all" && Array.isArray(rule.contains_all)) containsList = rule.contains_all;
-    else if (type === "contains_any" && Array.isArray(rule.contains_any)) containsList = rule.contains_any;
-    else if (type === "contains_exact" && Array.isArray(rule.tokens)) containsList = rule.tokens;
+    if ((type === "equals" || type === "not_equals") && rule.value != null) value = String(rule.value);
+    else if (type === "range") {
+      if (rule.min !== undefined) rangeMin = String(rule.min);
+      if (rule.max !== undefined) rangeMax = String(rule.max);
+    }
+    else if (type === "one_of" && Array.isArray(rule.values)) containsList = rule.values;
+    else if (type === "includes_all" && Array.isArray(rule.values)) containsList = rule.values;
+    else if (type === "token_set" && Array.isArray(rule.tokens)) containsList = rule.tokens;
     else if (type === "positional" && Array.isArray(rule.pos)) posList = rule.pos;
     if (rule.token_length) tokenLen = rule.token_length;
   }
@@ -514,6 +525,8 @@ function openRuleEditorForParam(paramName, currentValue) {
   el.ruleTypeSelect.value = type;
   el.ruleRequiredCheckbox.checked = required;
   setRuleValueInputValue(value);
+  el.ruleRangeMin.value = rangeMin;
+  el.ruleRangeMax.value = rangeMax;
   el.ruleContainsInput.value = containsList.join(",");
   el.ruleReviewNote.value = ruleNote;
   updateRuleEditorVisibility();
@@ -532,6 +545,8 @@ function saveCurrentRule() {
 
   const type = el.ruleTypeSelect.value;
   const val = el.ruleValueInput.value.trim();
+  const rangeMin = el.ruleRangeMin.value.trim();
+  const rangeMax = el.ruleRangeMax.value.trim();
   const contains = el.ruleContainsInput.value.split(",").map((s) => s.trim()).filter(Boolean);
   const ruleNote = el.ruleReviewNote.value.trim();
   const required = el.ruleRequiredCheckbox.checked;
@@ -548,10 +563,16 @@ function saveCurrentRule() {
     ruleObj = "allowed";
   } else {
     ruleObj = { rule: type };
-    if (type === "equals") ruleObj.value = val;
-    if (type === "contains_all") ruleObj.contains_all = contains;
-    if (type === "contains_any") ruleObj.contains_any = contains;
-    if (type === "contains_exact") ruleObj.tokens = contains;
+    if (type === "equals" || type === "not_equals") ruleObj.value = val;
+    if (type === "range") {
+      const min = parseFloat(rangeMin);
+      const max = parseFloat(rangeMax);
+      if (!isNaN(min)) ruleObj.min = min;
+      if (!isNaN(max)) ruleObj.max = max;
+    }
+    if (type === "one_of") ruleObj.values = contains;
+    if (type === "includes_all") ruleObj.values = contains;
+    if (type === "token_set") ruleObj.tokens = contains;
     if (type === "positional") ruleObj.pos = pos;
     if (hasNote) ruleObj.note = ruleNote;
     const shouldPersistTokenLength = (type !== "allowed" && type !== "forbidden") || required || hasNote;
@@ -629,6 +650,13 @@ function exportRuleset() {
 }
 
 /* ── Event wiring ────────────────────────────────────────────── */
+document.getElementById("ruleTypeHelpBtn")?.addEventListener("click", () => {
+  showPanel("help");
+  requestAnimationFrame(() => {
+    document.getElementById("rulesetFormatSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
 el.validateBtn.addEventListener("click", runValidation);
 el.exportRulesBtn.addEventListener("click", exportRuleset);
 el.saveParamRuleBtn.addEventListener("click", saveCurrentRule);

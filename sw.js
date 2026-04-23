@@ -1,4 +1,4 @@
-const CACHE_NAME = 'config-whisperer-v2';
+const CACHE_NAME = 'config-whisperer-v1.1.2';
 const ASSETS = [
   './',
   './index.html',

@@ -6,7 +6,7 @@
   "display": "standalone",
   "background_color": "#121821",
   "theme_color": "#121821",
-  "version": "v1.1.0",
+  "version": "v1.1.2",
   "icons": [
     {
       "src": "maskable_icon_x192.png",

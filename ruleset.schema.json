@@ -29,11 +29,12 @@
                 "enum": [
                   "allowed",
                   "equals",
-                  "nonzero",
+                  "not_equals",
+                  "range",
                   "forbidden",
-                  "contains_all",
-                  "contains_any",
-                  "contains_exact",
+                  "one_of",
+                  "includes_all",
+                  "token_set",
                   "review",
                   "positional"
                 ],
@@ -41,22 +42,25 @@
               },
               "value": {
                 "type": "string",
-                "description": "The exact value required (for 'equals')."
+                "description": "The exact value required or forbidden (for 'equals' and 'not_equals')."
               },
-              "contains_all": {
+              "min": {
+                "type": "number",
+                "description": "Minimum allowed numeric value (for 'range')."
+              },
+              "max": {
+                "type": "number",
+                "description": "Maximum allowed numeric value (for 'range')."
+              },
+              "values": {
                 "type": "array",
                 "items": { "type": "string" },
-                "description": "Every token in this list must be present in the line."
-              },
-              "contains_any": {
-                "type": "array",
-                "items": { "type": "string" },
-                "description": "At least one token in this list must be present in the line."
+                "description": "List of values for 'one_of' (any must match) or 'includes_all' (all must be present)."
               },
               "tokens": {
                 "type": "array",
                 "items": { "type": "string" },
-                "description": "The tokens must match the remainder of the line exactly (for 'contains_exact')."
+                "description": "The exact set of tokens the remainder must contain (for 'token_set')."
               },
               "pos": {
                 "type": "array",

@@ -58,24 +58,42 @@ function evaluateRule(rule, lineValue, fullLine, remainderTokens) {
       status = "fail";
       reasons.push("Must equal " + expected);
     }
-  } else if (type === "nonzero") {
-    if (String(lineValue) === "0") {
+  } else if (type === "not_equals") {
+    const forbidden = typeof rule === "object" ? String(rule.value ?? "") : "";
+    if (String(lineValue) === forbidden) {
       status = "fail";
-      reasons.push("Value must be nonzero");
+      reasons.push("Must not equal " + forbidden);
     }
-  } else if (type === "contains_all" && typeof rule === "object") {
-    const missing = (rule.contains_all || []).filter((part) => !fullLine.includes(part));
+  } else if (type === "range" && typeof rule === "object") {
+    const num = parseFloat(lineValue);
+    if (isNaN(num)) {
+      status = "fail";
+      reasons.push("Expected a numeric value");
+    } else {
+      if (rule.min !== undefined && num < rule.min) {
+        status = "fail";
+        reasons.push("Must be ≥ " + rule.min);
+      }
+      if (rule.max !== undefined && num > rule.max) {
+        status = "fail";
+        reasons.push("Must be ≤ " + rule.max);
+      }
+    }
+  } else if (type === "one_of" && typeof rule === "object") {
+    const list = rule.values || [];
+    const valueTokens = (lineValue || "").split(/\s+/).filter(Boolean);
+    if (!list.some((part) => valueTokens.includes(String(part)))) {
+      status = "fail";
+      reasons.push("Must be one of: " + list.join(", "));
+    }
+  } else if (type === "includes_all" && typeof rule === "object") {
+    const valueTokens = (lineValue || "").split(/\s+/).filter(Boolean);
+    const missing = (rule.values || []).filter((part) => !valueTokens.includes(String(part)));
     if (missing.length) {
       status = "fail";
       reasons.push("Missing: " + missing.join(", "));
     }
-  } else if (type === "contains_any" && typeof rule === "object") {
-    const list = rule.contains_any || [];
-    if (!list.some((part) => fullLine.includes(part))) {
-      status = "fail";
-      reasons.push("Must contain one of: " + list.join(", "));
-    }
-  } else if (type === "contains_exact" && typeof rule === "object") {
+  } else if (type === "token_set" && typeof rule === "object") {
     const expected = rule.tokens || [];
     const actual = (lineValue || "").split(/\s+/).filter(Boolean);
     const missing = expected.filter((t) => !actual.includes(t));

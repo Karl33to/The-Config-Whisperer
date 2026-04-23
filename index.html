@@ -178,32 +178,38 @@
             </div>
 
             <div class="field-group">
-              <label for="ruleTypeSelect">Rule type</label>
+              <label for="ruleTypeSelect">Rule type <button type="button" class="help-icon-btn" id="ruleTypeHelpBtn" aria-label="Open rule type reference">?</button></label>
               <select id="ruleTypeSelect">
                 <option value="allowed">any value</option>
                 <option value="equals">equals</option>
-                <option value="nonzero">nonzero</option>
+                <option value="not_equals">not equals</option>
+                <option value="range">range</option>
                 <option value="forbidden">forbidden</option>
-                <option value="contains_all">contains_all</option>
-                <option value="contains_any">contains_any</option>
-                <option value="contains_exact">contains_exact</option>
+                <option value="one_of">one of</option>
+                <option value="includes_all">includes all</option>
+                <option value="token_set">token set</option>
                 <option value="review">review</option>
                 <option value="positional">positional</option>
               </select>
-              <small class="hint"
-                >any value: line is allowed with no value check. equals:
-                remainder must match exactly. nonzero: cannot be 0. forbidden:
-                line must not appear. review: flags for manual inspection with a
-                note.</small
-              >
             </div>
 
             <div class="field-group" id="ruleValueGroup" style="display: none">
-              <label for="ruleValueInput">Equals / value</label>
+              <label for="ruleValueInput">Value</label>
               <input type="text" id="ruleValueInput" />
-              <small
-                >For "equals", the config value must match this exactly.</small
-              >
+            </div>
+
+            <div class="field-group" id="ruleRangeGroup" style="display: none">
+              <label>Range</label>
+              <div class="range-inputs">
+                <div class="range-half">
+                  <label for="ruleRangeMin">Min</label>
+                  <input type="number" id="ruleRangeMin" placeholder="optional" />
+                </div>
+                <div class="range-half">
+                  <label for="ruleRangeMax">Max</label>
+                  <input type="number" id="ruleRangeMax" placeholder="optional" />
+                </div>
+              </div>
             </div>
 
             <div
@@ -211,21 +217,12 @@
               id="ruleContainsGroup"
               style="display: none"
             >
-              <label for="ruleContainsInput"
-                >Contains tokens (comma-separated)</label
-              >
+              <label for="ruleContainsInput">Values (comma-separated)</label>
               <input
                 type="text"
                 id="ruleContainsInput"
                 placeholder="e.g. 25,PIT"
               />
-              <small class="hint">
-                contains_all: every token must be present anywhere in the
-                line.<br />
-                contains_any: at least one token must be present.<br />
-                contains_exact: tokens must match the remainder exactly (no
-                extras).
-              </small>
             </div>
 
             <div class="field-group" id="ruleReviewGroup">
@@ -235,9 +232,6 @@
                 rows="3"
                 placeholder="Optional context for this rule"
               ></textarea>
-              <small class="hint"
-                >Optional note shown as a tooltip for this rule.</small
-              >
             </div>
 
             <div
@@ -305,18 +299,17 @@
           <div class="menu-section">
             <div class="menu-section-title">Workflow</div>
             <p class="menu-note">
-              Paste or drop a Betaflight CLI export (<code>diff all</code> or
-              <code>preset save backup</code> recommended) into the Config Input
-              box, then paste or drop a ruleset JSON into the Ruleset box and
-              press <strong>Validate</strong>.<br /><br />
+              Paste or drop a config export into the Config Input box, then
+              paste or drop a ruleset JSON into the Ruleset box and press
+              <strong>Validate</strong>.<br /><br />
               To build a ruleset from scratch: validate a config with no ruleset
               loaded, then click any line in the results to open the Rule Editor
               and assign rules. Use <strong>Export ruleset</strong> to save your
-              work as a <code>.json</code> file that can be shared or re-imported
-              later.
+              work as a <code>.json</code> file that can be shared or
+              re-imported later.
             </p>
           </div>
-          <div class="menu-section">
+          <div class="menu-section" id="rulesetFormatSection">
             <div class="menu-section-title">Ruleset Format</div>
             <p class="menu-note">
               A ruleset is a JSON object with a <code>rules</code> key. Each
@@ -325,7 +318,7 @@
             <pre class="menu-note" style="margin-top:6px;overflow-x:auto">{
   "rules": {
     "set motor_pwm_rate": { "rule": "equals", "value": "480" },
-    "aux 0": { "rule": "allowed" },
+    "aux 0": "allowed",
     "serial 0": { "rule": "review", "note": "Check port config" }
   }
 }</pre>
@@ -335,32 +328,36 @@
               </thead>
               <tbody>
                 <tr>
-                  <td><code>allowed</code></td>
-                  <td>Line is permitted; value is not checked.</td>
+                  <td><code>any value</code></td>
+                  <td>Line is permitted; value is not checked. Written as <code>"allowed"</code> in the ruleset JSON.</td>
                 </tr>
                 <tr>
                   <td><code>equals</code></td>
                   <td>Remainder must exactly match the <code>value</code> field.</td>
                 </tr>
                 <tr>
-                  <td><code>nonzero</code></td>
-                  <td>Value must not be <code>0</code>.</td>
+                  <td><code>not equals</code></td>
+                  <td>Remainder must not equal the <code>value</code> field.</td>
+                </tr>
+                <tr>
+                  <td><code>range</code></td>
+                  <td>Value must be numeric and fall within <code>min</code> and/or <code>max</code> bounds (either is optional).</td>
                 </tr>
                 <tr>
                   <td><code>forbidden</code></td>
                   <td>Line must not appear in the config.</td>
                 </tr>
                 <tr>
-                  <td><code>contains_all</code></td>
-                  <td>Every token in the <code>contains_all</code> array must appear somewhere in the line.</td>
+                  <td><code>one of</code></td>
+                  <td>Value must exactly match one of the entries in the <code>values</code> array.</td>
                 </tr>
                 <tr>
-                  <td><code>contains_any</code></td>
-                  <td>At least one token in the <code>contains_any</code> array must appear.</td>
+                  <td><code>includes all</code></td>
+                  <td>Every entry in the <code>values</code> array must appear as a token in the value (order does not matter).</td>
                 </tr>
                 <tr>
-                  <td><code>contains_exact</code></td>
-                  <td>The remainder must contain exactly the tokens in the <code>tokens</code> array — no more, no less.</td>
+                  <td><code>token set</code></td>
+                  <td>The value must contain exactly the tokens in the <code>tokens</code> array — no more, no less, any order.</td>
                 </tr>
                 <tr>
                   <td><code>positional</code></td>
@@ -374,9 +371,7 @@
             </table>
             <p class="menu-note" style="margin-top:var(--space-2)">
               Add <code>"required": true</code> to any rule to fail validation
-              when that line is absent from the config. A <code>firmware</code>
-              key with an <code>allowed_git_hashes</code> array can be used to
-              enforce a specific firmware build.
+              when that line is absent from the config.
             </p>
           </div>
           <div class="menu-section">

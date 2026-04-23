@@ -434,6 +434,48 @@ nav.menu > button[aria-selected="true"] {
   margin-right: 0;
 }
 
+.help-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  background: none;
+  border: 1px solid var(--muted);
+  border-radius: 50%;
+  color: var(--muted);
+  cursor: pointer;
+  vertical-align: middle;
+  margin-left: var(--space-1);
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.help-icon-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.range-inputs {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.range-half {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.range-half label {
+  font-size: 11px;
+  color: var(--muted);
+}
+
 /* ---- 4f. Form inputs & fields ---- */
 
 textarea {

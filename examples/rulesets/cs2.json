@@ -1,0 +1,54 @@
+{
+  "$schema": "../../ruleset.schema.json",
+  "name": "Counter-Strike 2",
+  "version": "1.1.1",
+  "description": "Counter-Strike 2 Basic Ruleset",
+  "rules": {
+    "//": "allowed",
+    "bind \"mouse_x\"": {
+      "rule": "allowed",
+      "token_length": 2,
+      "required": true
+    },
+    "bind \"mouse_y\"": {
+      "rule": "allowed",
+      "token_length": 2,
+      "required": true
+    },
+    "bind \"mouse1\"": {
+      "rule": "allowed",
+      "token_length": 2,
+      "required": true
+    },
+    "bind \"mouse2\"": {
+      "rule": "allowed",
+      "token_length": 2,
+      "required": true
+    },
+    "bind \"x_axis\"": {
+      "rule": "allowed",
+      "token_length": 2,
+      "required": true
+    },
+    "bind \"y_axis\"": {
+      "rule": "allowed",
+      "token_length": 2,
+      "required": true
+    },
+    "sensitivity": {
+      "rule": "allowed",
+      "token_length": 1,
+      "required": true
+    },
+    "volume": {
+      "rule": "allowed",
+      "token_length": 1,
+      "required": true
+    },
+    "zoom_sensitivity_ratio": {
+      "rule": "allowed",
+      "token_length": 1,
+      "required": true
+    }
+  }
+}
